@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { useContext } from "react";
+import { useRouter } from "next/router";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../../../context/AuthContext";
 import { useStore } from "../../../store/loginStore";
 import HeaderNavBar from "./HeaderNavBar";
@@ -8,13 +9,21 @@ import type { FC } from "react";
 
 const navItems = [
   { title: "Home", path: "/" },
-  { title: "New Post", path: "/create-post" },
+  { title: "Drafts", path: "/saved-drafts" },
+  { title: "Create Post", path: "/draft-post" },
 ];
 
 const Header: FC = () => {
+  const { push } = useRouter();
   const isLoggedIn = useStore((state) => state.$isLoggedIn);
   const logoutUser = useStore((state) => state.logoutUser);
   const { setModalVisibilty } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      push("/");
+    }
+  }, [isLoggedIn]);
 
   const handleAuthAction = () => {
     isLoggedIn ? logoutUser() : setModalVisibilty(true);
@@ -23,7 +32,7 @@ const Header: FC = () => {
     <div className="flex flex-row py-10 sticky top-0 z-20 px-6 bg-white sm:flex-col">
       <div className="flex w-full justify-between sm:mb-4">
         <Link href="/" passHref>
-          <label className="font-spline font-bold text-xl text-[#354136]">
+          <label className="font-spline cursor-pointer font-bold text-xl text-[#354136]">
             Blunt CMS
           </label>
         </Link>
