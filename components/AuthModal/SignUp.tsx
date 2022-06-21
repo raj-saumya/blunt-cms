@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Input } from "./Shared";
+import { useStore } from "../../store/loginStore";
+import { Input, LoadingIcon } from "./Shared";
 import type { FC } from "react";
 
 interface ISignUp {
@@ -9,7 +10,14 @@ interface ISignUp {
   setModalVisibilty: any;
 }
 
-const SignUp: FC<ISignUp> = ({ setLoginVisibility, username, setUsername }) => {
+const SignUp: FC<ISignUp> = ({
+  setLoginVisibility,
+  username,
+  setUsername,
+  setModalVisibilty,
+}) => {
+  const isLoading = useStore((state) => state.$isLoading);
+  const signUpUser = useStore((state) => state.signUpUser);
   const [password, setPassword] = useState<string>("");
   const [password2, setPassword2] = useState<string>("");
 
@@ -20,6 +28,14 @@ const SignUp: FC<ISignUp> = ({ setLoginVisibility, username, setUsername }) => {
       password2 !== "" &&
       password === password2
     );
+  };
+
+  const handleSignUp = async () => {
+    await signUpUser({
+      username,
+      password,
+    });
+    setModalVisibilty(false);
   };
 
   return (
@@ -63,10 +79,11 @@ const SignUp: FC<ISignUp> = ({ setLoginVisibility, username, setUsername }) => {
       </div>
       {/* Modal footer */}
       <button
-        className="font-spline text-sm w-full text-white bg-sky-500 hover:bg-sky-600 px-4 py-2 ml-auto rounded-md mb-10 disabled:bg-sky-900"
-        disabled={isBtnDisabled()}
+        className="flex justify-center font-spline text-sm w-full text-white bg-sky-500 hover:bg-sky-600 px-4 py-2 ml-auto rounded-md mb-10 disabled:bg-sky-900"
+        disabled={isLoading || isBtnDisabled()}
+        onClick={handleSignUp}
       >
-        Sign Up
+        {isLoading ? <LoadingIcon /> : "Login"}
       </button>
       <div className="flex justify-center">
         <label className="font-spline text-xs mr-1">

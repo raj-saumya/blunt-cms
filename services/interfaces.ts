@@ -11,3 +11,15 @@ export interface IUserLoginReq {
 export interface IUserLoginResp {
   token: string;
 }
+
+export interface IUserSignUpResp {
+  id: number;
+  username: string;
+  is_admin: boolean;
+  token: string;
+}
+
+export interface ICreatePostReq {
+  subject: string;
+  body: string;
+}

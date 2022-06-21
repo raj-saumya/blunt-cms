@@ -4,6 +4,7 @@ import { useStore } from "../store/loginStore";
 import LayoutWrapper from "../components/LayoutWrapper";
 import PostForm from "../components/PostForm";
 import type { NextPage } from "next";
+import { createPost } from "../services/authService";
 
 const DraftPost: NextPage = () => {
   const isLoggedIn = useStore((state) => state.$isLoggedIn);
@@ -13,6 +14,16 @@ const DraftPost: NextPage = () => {
   const meta: IMeta = {
     title: "Create Post",
     description: "Create a new post to publish",
+  };
+
+  const handleOnClick = () => {
+    createPost({
+      subject: title,
+      body: body,
+    }).then(() => {
+      setTitle("");
+      setBody("");
+    });
   };
 
   return (
@@ -30,14 +41,9 @@ const DraftPost: NextPage = () => {
               <button
                 className="font-spline text-sm rounded-md bg-sky-600 text-white px-4 py-2 shadow hover:bg-sky-700 mr-4 disabled:bg-sky-800"
                 disabled={title === "" || body === ""}
+                onClick={handleOnClick}
               >
                 Save as draft
-              </button>
-              <button
-                className="font-spline text-sm rounded-md bg-sky-600 text-white px-4 py-2 shadow hover:bg-sky-700 disabled:bg-sky-800"
-                disabled={title === "" || body === ""}
-              >
-                Send request to publish
               </button>
             </div>
           </>

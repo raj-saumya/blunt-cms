@@ -13,7 +13,10 @@ export interface IModal {
 }
 
 export interface IPosts {
-  author: string;
-  title: string;
-  excerpt: string;
+  body: string;
+  id: number;
+  owner: boolean;
+  owner_name: string;
+  status: string;
+  subject: string;
 }
